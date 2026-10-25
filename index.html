@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050818">
+<title>M. Maria Joshua | God of Thunder Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Mark JS available BEFORE CSS runs (progressive enhancement) -->
+<script>document.documentElement.classList.add('js');</script>
+
+<style>
+/* ============================================================
+   TOKENS — Asgardian palette
+   ============================================================ */
+:root {
+  --navy-900:#050818;
+  --navy-800:#0a0e27;
+  --navy-700:#121838;
+  --navy-600:#1a2050;
+  --gold:#ffd700;
+  --gold-soft:#ffe58a;
+  --gold-deep:#b8860b;
+  --blue:#00d4ff;
+  --blue-soft:#7ce7ff;
+  --blue-deep:#006994;
+  --silver:#c8d0dc;
+  --silver-dark:#6a7280;
+  --text:#e8ecf5;
+  --muted:#8a94b0;
+  --border:rgba(255,215,0,0.28);
+  --border-blue:rgba(0,212,255,0.38);
+  --radius:16px;
+  --maxw:1180px;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+
+html {
+  scroll-behavior:smooth;
+  scroll-padding-top:90px;
+}
+
+body {
+  color:var(--text);
+  font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  line-height:1.65;
+  overflow-x:hidden;
+  cursor:none;
+  -webkit-font-smoothing:antialiased;
+
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,212,255,0.15), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(255,215,0,0.10), transparent 60%),
+    linear-gradient(180deg, #050818 0%, #0a0e27 40%, #050818 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+}
+
+a, button { color:inherit; text-decoration:none; cursor:none; font:inherit; }
+::selection { background:var(--gold); color:var(--navy-900); }
+:focus-visible { outline:2px solid var(--blue); outline-offset:3px; border-radius:6px; }
+
+h1, h2, h3 { font-family:'Cinzel', serif; letter-spacing:0.01em; }
+
+/* Content layer above background */
+.navbar, main, footer { position:relative; z-index:1; }
+
+/* ============================================================
+   STORM BACKGROUND LAYERS
+   ============================================================ */
+.storm-overlay {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(0,212,255,0.22), transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(255,215,0,0.12), transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(0,212,255,0.15), transparent 60%);
+}
+
+#stormCanvas {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  display:block; width:100%; height:100%;
+}
+
+#lightningFlash {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:rgba(180,220,255,0);
+  opacity:0;
+}
+#lightningFlash.flash { animation:lightningFlash 0.4s ease-out; }
+@keyframes lightningFlash {
+  0%   { background:rgba(180,220,255,0.6); opacity:1; }
+  15%  { background:rgba(180,220,255,0.1); opacity:1; }
+  30%  { background:rgba(180,220,255,0.45); opacity:1; }
+  100% { background:rgba(180,220,255,0);   opacity:0; }
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  position:fixed; top:0; left:0; height:3px; width:0;
+  background:linear-gradient(90deg,var(--gold),var(--blue),var(--gold));
+  z-index:200; pointer-events:none;
+  box-shadow:0 0 15px var(--gold), 0 0 30px var(--blue);
+  transition:width 0.1s linear;
+}
+
+/* ============================================================
+   LIGHTNING CURSOR
+   ============================================================ */
+#cursor {
+  position:fixed; top:0; left:0;
+  width:30px; height:30px; margin:-15px 0 0 -15px;
+  z-index:9999; pointer-events:none;
+  font-size:26px; line-height:30px; text-align:center; font-weight:900;
+  color:var(--gold);
+  text-shadow:
+    0 0 8px rgba(255,215,0,0.95),
+    0 0 16px rgba(0,212,255,0.85),
+    0 0 28px rgba(255,215,0,0.55);
+  opacity:0;
+  will-change:transform;
+  transition:opacity 0.25s ease;
+}
+#cursor.is-active { opacity:1; }
+
+.spark {
+  position:fixed; top:0; left:0;
+  width:14px; height:14px; margin:-7px 0 0 -7px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,215,0,0.9) 0%, rgba(0,212,255,0.5) 50%, transparent 70%);
+  box-shadow:0 0 12px rgba(255,215,0,0.8), 0 0 20px rgba(0,212,255,0.6);
+  pointer-events:none; z-index:9998;
+  animation:sparkFade 0.65s ease-out forwards;
+}
+@keyframes sparkFade {
+  from { transform:scale(0.4); opacity:1; }
+  to   { transform:scale(2.2); opacity:0; }
+}
+
+/* ============================================================
+   CORNER RUNE
+   ============================================================ */
+.corner-rune {
+  position:fixed; top:22px; left:24px; z-index:3;
+  font-family:'Cinzel', serif; font-size:34px; font-weight:900;
+  color:var(--gold);
+  text-shadow:
+    0 0 12px var(--gold),
+    0 0 26px rgba(255,149,0,0.7),
+    0 0 40px rgba(0,212,255,0.4);
+  pointer-events:none;
+  animation:runeSpin 10s ease-in-out infinite;
+}
+@keyframes runeSpin {
+  0%, 100% { transform:rotate(0) scale(1); opacity:0.65; }
+  50%      { transform:rotate(180deg) scale(1.1); opacity:1; }
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:20px;
+  padding:18px clamp(18px,4vw,42px);
+  background:rgba(5,8,24,0.72);
+  border-bottom:1px solid transparent;
+  backdrop-filter:blur(16px) saturate(150%);
+  -webkit-backdrop-filter:blur(16px) saturate(150%);
+  transition:background 0.3s ease, border-color 0.3s ease;
+}
+.navbar.scrolled {
+  background:rgba(5,8,24,0.92);
+  border-bottom-color:var(--border);
+  box-shadow:0 10px 30px -20px rgba(255,215,0,0.6);
+}
+
+.logo {
+  font-family:'Cinzel', serif;
+  font-size:1.4rem; font-weight:900; letter-spacing:0.02em;
+  color:var(--gold);
+  text-shadow:0 0 18px rgba(255,215,0,0.6);
+}
+.logo span { color:var(--blue); margin-left:2px; }
+
+.navbar nav { display:flex; gap:clamp(14px,2.2vw,30px); }
+.navbar nav a {
+  position:relative; padding:4px 0;
+  font-size:0.88rem; font-weight:500; color:var(--muted);
+  transition:color 0.25s ease;
+}
+.navbar nav a::after {
+  content:""; position:absolute; left:0; bottom:0;
+  width:0; height:2px; border-radius:2px;
+  background:linear-gradient(90deg,var(--gold),var(--blue));
+  box-shadow:0 0 10px rgba(255,215,0,0.7);
+  transition:width 0.3s var(--ease);
+}
+.navbar nav a:hover,
+.navbar nav a.active { color:var(--gold); }
+.navbar nav a:hover::after,
+.navbar nav a.active::after { width:100%; }
+
+.nav-button {
+  padding:10px 20px; border-radius:999px;
+  font-size:0.84rem; font-weight:600; white-space:nowrap;
+  color:var(--gold-soft);
+  border:1px solid rgba(255,215,0,0.55);
+  background:rgba(255,215,0,0.10);
+  box-shadow:0 0 18px -6px rgba(255,215,0,0.75);
+  transition:transform 0.28s var(--ease), background 0.28s ease, box-shadow 0.28s ease;
+}
+.nav-button:hover {
+  transform:translateY(-2px);
+  background:rgba(255,215,0,0.20);
+  box-shadow:0 0 28px rgba(255,215,0,0.6);
+}
+
+/* ============================================================
+   SHARED
+   ============================================================ */
+.gold-text {
+  color:var(--gold);
+  text-shadow:
+    0 0 20px rgba(255,215,0,0.7),
+    0 0 40px rgba(255,149,0,0.5),
+    0 0 60px rgba(255,215,0,0.3);
+}
+.blue-text {
+  color:var(--blue);
+  text-shadow:
+    0 0 20px rgba(0,212,255,0.7),
+    0 0 40px rgba(0,150,255,0.5);
+}
+
+.button {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 26px; border-radius:999px;
+  font-size:0.9rem; font-weight:600;
+  border:1px solid transparent;
+  transition:transform 0.28s var(--ease), box-shadow 0.28s var(--ease),
+             background 0.28s ease, border-color 0.28s ease;
+}
+.button.primary {
+  background:linear-gradient(135deg, #ffdf4a 0%, #d4a017 55%, #a37a05 100%);
+  color:#0a0e27;
+  border-color:rgba(255,230,120,0.7);
+  box-shadow:
+    0 14px 34px -12px rgba(255,215,0,0.9),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.button.primary:hover {
+  transform:translateY(-3px);
+  box-shadow:
+    0 20px 46px -12px rgba(255,215,0,1),
+    0 0 40px rgba(0,212,255,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.45);
+}
+.button.secondary {
+  background:rgba(0,212,255,0.14);
+  color:var(--blue-soft);
+  border-color:rgba(0,212,255,0.55);
+  box-shadow:0 0 22px -8px rgba(0,212,255,0.9);
+}
+.button.secondary:hover {
+  transform:translateY(-3px);
+  background:rgba(0,212,255,0.24);
+  box-shadow:0 16px 36px -16px rgba(0,212,255,1);
+}
+
+.glass-card {
+  position:relative;
+  background:
+    linear-gradient(160deg, rgba(0,212,255,0.09), rgba(255,215,0,0.05)),
+    rgba(18,24,56,0.82);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:clamp(20px,3vw,30px);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:
+    0 30px 70px -40px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(255,215,0,0.15);
+  transition:transform 0.35s var(--ease), border-color 0.35s var(--ease),
+             box-shadow 0.35s var(--ease);
+}
+.glass-card::before {
+  content:"";
+  position:absolute; inset:0 0 auto 0; height:1px;
+  border-radius:var(--radius) var(--radius) 0 0;
+  background:linear-gradient(90deg, transparent, rgba(255,215,0,0.8), transparent);
+  opacity:0.9;
+}
+
+.section-label {
+  display:inline-flex; align-items:center; gap:10px;
+  margin-bottom:14px;
+  font-family:'Cinzel', serif;
+  font-size:0.72rem; font-weight:700;
+  letter-spacing:0.24em; text-transform:uppercase;
+  color:var(--gold);
+  text-shadow:0 0 10px rgba(255,215,0,0.5);
+}
+.section-label::before {
+  content:"⚡";
+  font-size:0.9rem;
+  filter:drop-shadow(0 0 6px var(--gold));
+  margin-right:-2px;
+}
+
+/* ============================================================
+   REVEAL — visible by default, JS gates hiding
+   ============================================================ */
+.reveal { opacity:1; transform:none; }
+html.js .reveal {
+  opacity:0; transform:translateY(30px);
+  transition:opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+html.js .reveal.is-visible { opacity:1; transform:none; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position:relative;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:clamp(48px,8vh,100px) clamp(18px,4vw,42px) 110px;
+  min-height:calc(100vh - 76px);
+  display:grid;
+  grid-template-columns:1.05fr 0.95fr;
+  align-items:center;
+  gap:clamp(32px,5vw,72px);
+}
+
+.eyebrow {
+  display:flex; align-items:center; gap:10px;
+  font-size:0.74rem; font-weight:600;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--gold-soft);
+}
+.eyebrow .bolt {
+  font-size:1rem;
+  color:var(--gold);
+  text-shadow:0 0 10px var(--gold), 0 0 20px var(--blue);
+  animation:boltPulse 1.6s ease-in-out infinite;
+}
+@keyframes boltPulse {
+  0%, 100% { opacity:1; transform:scale(1); }
+  50%      { opacity:0.6; transform:scale(1.15); }
+}
+
+.hero h1 {
+  margin:22px 0 24px;
+  font-size:clamp(2.3rem, 6vw, 4.6rem);
+  font-weight:800;
+  line-height:0.98;
+  letter-spacing:0.01em;
+  text-transform:uppercase;
+  text-shadow:0 0 50px rgba(0,212,255,0.25);
+}
+
+.hero-description {
+  max-width:48ch;
+  color:var(--muted);
+  font-size:1.02rem;
+}
+
+.hero-buttons {
+  display:flex; flex-wrap:wrap; gap:14px;
+  margin:32px 0 40px;
+}
+
+.hero-stats {
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:18px;
+  max-width:500px;
+  padding-top:24px;
+  border-top:1px solid var(--border);
+}
+.hero-stats div { display:flex; flex-direction:column; gap:4px; }
+.hero-stats strong {
+  font-family:'Cinzel', serif;
+  font-size:1.5rem;
+  font-weight:900;
+  background:linear-gradient(90deg, var(--gold), var(--blue));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+}
+.hero-stats span {
+  font-size:0.72rem; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--muted);
+}
+
+/* ============================================================
+   HERO ART — Photo + runic rings + lightning
+   ============================================================ */
+.hero-art {
+  position:relative;
+  display:grid; place-items:center;
+  min-height:clamp(360px, 44vw, 520px);
+}
+
+.rune-ring {
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+.rune-ring.ring-outer {
+  width:min(88%, 420px);
+  aspect-ratio:1;
+  border:2px dashed rgba(255,215,0,0.4);
+  box-shadow:
+    0 0 60px rgba(255,215,0,0.18),
+    inset 0 0 60px rgba(0,212,255,0.12);
+  animation:spin 40s linear infinite;
+}
+.rune-ring.ring-inner {
+  width:min(66%, 320px);
+  aspect-ratio:1;
+  border:1px solid rgba(0,212,255,0.4);
+  animation:spin 25s linear infinite reverse;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Runic glyphs orbiting — placed with absolute positions */
+.rune-glyph {
+  position:absolute;
+  width:min(88%, 420px);
+  aspect-ratio:1;
+  pointer-events:none;
+  animation:spin 40s linear infinite;
+}
+.rune-glyph span {
+  position:absolute;
+  font-family:'Cinzel', serif;
+  font-size:20px;
+  color:var(--gold);
+  text-shadow:0 0 12px var(--gold), 0 0 24px rgba(255,149,0,0.6);
+  font-weight:900;
+}
+.rune-glyph span:nth-child(1) { top:2%;   left:50%; transform:translateX(-50%); }
+.rune-glyph span:nth-child(2) { top:14%;  right:8%; }
+.rune-glyph span:nth-child(3) { top:50%;  right:0; transform:translateY(-50%); }
+.rune-glyph span:nth-child(4) { bottom:14%; right:8%; }
+.rune-glyph span:nth-child(5) { bottom:2%; left:50%; transform:translateX(-50%); }
+.rune-glyph span:nth-child(6) { bottom:14%; left:8%; }
+.rune-glyph span:nth-child(7) { top:50%;  left:0; transform:translateY(-50%); }
+.rune-glyph span:nth-child(8) { top:14%;  left:8%; }
+
+/* --- THOR PHOTO PROFILE (Replaces Hammer) --- */
+.thor-photo {
+  position:relative;
+  z-index:2;
+  width: min(75vw, 320px);
+  height: min(75vw, 320px);
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  animation: photoFloat 4.5s ease-in-out infinite;
+}
+
+@keyframes photoFloat {
+  0%, 100% { transform:translateY(0); }
+  50%      { transform:translateY(-12px); }
+}
+
+/* The actual Image */
+.thor-photo img {
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:center 20%;
+  border:4px solid var(--gold);
+  position:relative;
+  z-index:2;
+  animation: thorGlow 3s infinite alternate;
+}
+
+/* Lightning Glowing effect on image */
+@keyframes thorGlow {
+  0% {
+    box-shadow:
+      0 0 20px var(--gold),
+      0 0 40px rgba(255,215,0,0.5),
+      inset 0 0 15px var(--gold);
+    border-color:var(--gold);
+  }
+  100% {
+    box-shadow:
+      0 0 40px var(--blue),
+      0 0 80px rgba(0,212,255,0.8),
+      inset 0 0 25px var(--blue);
+    border-color:var(--blue);
+  }
+}
+
+/* Rotating Runic Ring around the image */
+.portal-ring {
+  position:absolute;
+  inset:-15px;
+  border-radius:50%;
+  border:2px dashed var(--gold);
+  box-shadow:0 0 15px rgba(255,215,0,0.6);
+  animation:spin 10s linear infinite;
+  z-index:1;
+}
+
+/* Second outer ring */
+.portal-ring::before {
+  content:"";
+  position:absolute;
+  inset:-12px;
+  border-radius:50%;
+  border:1px solid rgba(0,212,255,0.7);
+  box-shadow:0 0 20px rgba(0,212,255,0.5);
+  animation:spin 15s linear infinite reverse;
+}
+
+/* Floating lightning bolts around photo */
+.lightning-bolt {
+  position:absolute;
+  width:18px; height:90px;
+  background:linear-gradient(180deg, #ffffff 0%, #7ce7ff 45%, #00d4ff 100%);
+  clip-path:polygon(60% 0, 22% 45%, 45% 45%, 25% 100%, 78% 55%, 55% 55%);
+  filter:drop-shadow(0 0 10px #00d4ff) drop-shadow(0 0 22px rgba(0,212,255,0.7));
+  animation:boltFlicker 3s ease-in-out infinite;
+}
+.lb-1 { top:12%; left:2%; animation-delay:0s; }
+.lb-2 { top:24%; right:4%; animation-delay:-1s; width:15px; height:75px; }
+.lb-3 { bottom:14%; left:8%; animation-delay:-2s; width:14px; height:70px; }
+
+@keyframes boltFlicker {
+  0%, 100% { opacity:0.25; transform:scale(0.9); }
+  5%       { opacity:1; transform:scale(1.1); }
+  10%      { opacity:0.35; transform:scale(0.95); }
+  15%      { opacity:1; transform:scale(1.05); }
+  20%      { opacity:0.3; transform:scale(0.9); }
+  55%      { opacity:0.8; transform:scale(1); }
+}
+
+/* Floating tags */
+.floating-tag {
+  position:absolute;
+  padding:9px 15px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(18,24,56,0.92);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  font-size:0.7rem; font-weight:600;
+  letter-spacing:0.1em; text-transform:uppercase;
+  white-space:nowrap; color:var(--text);
+  box-shadow:
+    0 14px 30px -18px rgba(0,0,0,0.95),
+    0 0 20px -8px rgba(255,215,0,0.7);
+  animation:float 6s ease-in-out infinite;
+}
+.tag-one   { top:4%; left:0; color:var(--gold-soft); }
+.tag-two   { bottom:16%; right:0; color:var(--blue-soft); animation-delay:-2s; }
+.tag-three { bottom:2%; left:6%; color:var(--muted); animation-delay:-4s; }
+@keyframes float {
+  0%, 100% { transform:translateY(0); }
+  50%      { transform:translateY(-10px); }
+}
+
+.scroll-hint {
+  position:absolute;
+  left:50%; bottom:26px;
+  transform:translateX(-50%);
+  font-family:'Cinzel', serif;
+  font-size:0.68rem; letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--gold-soft);
+  text-shadow:0 0 12px rgba(255,215,0,0.6);
+  animation:bob 2.6s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform:translate(-50%, 0); }
+  50%      { transform:translate(-50%, 8px); }
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section {
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:clamp(64px,9vw,110px) clamp(18px,4vw,42px);
+}
+.section h2 {
+  margin-bottom:26px;
+  font-size:clamp(1.75rem, 4.2vw, 2.9rem);
+  font-weight:800;
+  line-height:1.1;
+  text-transform:uppercase;
+}
+.section-intro {
+  max-width:60ch;
+  margin:-10px 0 30px;
+  color:var(--muted);
+}
+
+/* About */
+.about-card {
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:26px;
+  align-items:start;
+}
+.about-icon {
+  width:64px; height:64px; border-radius:18px;
+  display:grid; place-items:center;
+  font-size:1.7rem;
+  font-family:'Cinzel', serif; font-weight:900;
+  color:var(--gold);
+  border:1px solid rgba(255,215,0,0.5);
+  background:linear-gradient(145deg, rgba(255,215,0,0.35), rgba(0,212,255,0.2));
+  box-shadow:
+    0 0 28px -8px rgba(255,215,0,0.9),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  text-shadow:0 0 10px var(--gold);
+}
+.about-card h3 { margin-bottom:10px; font-size:1.15rem; color:var(--gold-soft); }
+.about-card p  { margin-bottom:12px; color:var(--muted); }
+.about-card p:last-child { margin-bottom:0; }
+.quote {
+  color:var(--text) !important;
+  font-style:italic;
+  border-left:3px solid var(--gold);
+  padding-left:14px;
+  text-shadow:0 0 20px rgba(255,215,0,0.5);
+}
+
+/* Skills */
+.skills-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(235px, 1fr));
+  gap:18px;
+}
+.skill-card {
+  display:flex; flex-direction:column; gap:10px;
+}
+.skill-card:hover {
+  transform:translateY(-6px);
+  border-color:var(--border-blue);
+  box-shadow:
+    0 30px 60px -30px rgba(0,212,255,0.9),
+    0 0 40px -10px rgba(255,215,0,0.5),
+    inset 0 1px 0 rgba(255,215,0,0.18);
+}
+.skill-icon {
+  width:46px; height:46px;
+  margin-bottom:4px; border-radius:14px;
+  display:grid; place-items:center;
+  font-size:0.95rem; font-weight:700;
+  font-family:'Cinzel', serif;
+}
+.gold-bg {
+  color:#ffe58a;
+  border:1px solid rgba(255,215,0,0.6);
+  background:linear-gradient(145deg, rgba(255,215,0,0.45), rgba(255,215,0,0.12));
+  box-shadow:
+    0 0 22px -6px rgba(255,215,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  text-shadow:0 0 8px rgba(255,215,0,0.8);
+}
+.blue-bg {
+  color:#b3e0ff;
+  border:1px solid rgba(0,212,255,0.6);
+  background:linear-gradient(145deg, rgba(0,212,255,0.45), rgba(0,212,255,0.12));
+  box-shadow:
+    0 0 22px -6px rgba(0,212,255,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  text-shadow:0 0 8px rgba(0,212,255,0.8);
+}
+.skill-card h3 { font-size:1.02rem; color:var(--text); }
+.skill-card p  { flex:1; font-size:0.9rem; color:var(--muted); }
+.skill-track {
+  height:8px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.08);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.6);
+  overflow:hidden;
+  position:relative;
+}
+.skill-track::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.15));
+  pointer-events:none;
+}
+.skill-track span {
+  display:block;
+  width:0; height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg, var(--gold), #ff9500 40%, var(--blue));
+  box-shadow:0 0 14px rgba(255,215,0,0.9), 0 0 24px rgba(0,212,255,0.6);
+  transition:width 1.2s var(--ease);
+}
+.skill-card small {
+  font-size:0.7rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  opacity:0.9;
+}
+.note {
+  margin-top:20px;
+  font-size:0.78rem;
+  color:var(--muted);
+  opacity:0.7;
+}
+
+/* Education */
+.education-card {
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:24px;
+}
+.school-icon {
+  width:64px; height:64px; border-radius:18px;
+  display:grid; place-items:center;
+  font-size:2rem;
+  border:1px solid rgba(0,212,255,0.5);
+  background:linear-gradient(145deg, rgba(0,212,255,0.35), rgba(255,215,0,0.2));
+  box-shadow:
+    0 0 28px -8px rgba(0,212,255,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.school-label {
+  margin-bottom:6px;
+  font-family:'Cinzel', serif;
+  font-size:0.68rem; font-weight:700;
+  letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--gold);
+}
+.education-card h3 {
+  margin-bottom:6px;
+  font-size:1.12rem;
+  color:var(--gold-soft);
+}
+.education-card p { font-size:0.92rem; color:var(--muted); }
+
+.web-badge {
+  padding:8px 14px;
+  border-radius:999px;
+  border:1px solid rgba(255,215,0,0.65);
+  background:rgba(255,215,0,0.15);
+  color:var(--gold-soft);
+  font-family:'Cinzel', serif;
+  font-size:0.66rem; font-weight:700;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  box-shadow:0 0 20px -6px rgba(255,215,0,0.95);
+}
+
+/* Mission */
+.mission {
+  position:relative;
+  overflow:hidden;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:clamp(70px,10vw,120px) clamp(18px,4vw,42px);
+  text-align:center;
+}
+.mission-rune {
+  position:absolute;
+  inset:0;
+  display:grid; place-items:center;
+  font-family:'Cinzel', serif;
+  font-size:clamp(16rem, 34vw, 28rem);
+  line-height:1;
+  color:rgba(255,215,0,0.08);
+  pointer-events:none; user-select:none;
+  animation:spin 60s linear infinite;
+}
+.mission > *:not(.mission-rune) { position:relative; z-index:1; }
+.mission h2 {
+  margin:10px 0 18px;
+  font-size:clamp(1.9rem, 5vw, 3.4rem);
+  font-weight:800;
+  line-height:1.1;
+  text-transform:uppercase;
+}
+.mission p { color:var(--muted); }
+.mission .button { margin:26px 0 18px; }
+
+.motivation {
+  min-height:1.6em;
+  color:var(--blue-soft);
+  font-style:italic;
+  text-shadow:0 0 20px rgba(0,212,255,0.6);
+}
+.motivation.pop { animation:pop 0.5s var(--ease); }
+@keyframes pop {
+  0%   { opacity:0; transform:translateY(8px) scale(0.98); }
+  100% { opacity:1; transform:none; }
+}
+
+/* Contact */
+.contact-card {
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:24px;
+}
+.contact-symbol {
+  width:56px; height:56px; border-radius:16px;
+  display:grid; place-items:center;
+  font-size:1.4rem;
+  border:1px solid rgba(255,215,0,0.5);
+  background:linear-gradient(145deg, rgba(255,215,0,0.35), rgba(0,212,255,0.2));
+  box-shadow:
+    0 0 26px -8px rgba(255,215,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.contact-card h3 { margin-bottom:6px; font-size:1.1rem; color:var(--gold-soft); }
+.contact-card p  { margin-bottom:10px; font-size:0.92rem; color:var(--muted); }
+.email-link {
+  color:var(--blue-soft);
+  font-weight:600;
+  border-bottom:1px solid transparent;
+  text-shadow:0 0 18px rgba(0,212,255,0.6);
+  transition:color 0.25s ease, border-color 0.25s ease;
+}
+.email-link:hover { color:#c9e8ff; border-bottom-color:currentColor; }
+
+/* Footer */
+footer {
+  display:flex; flex-wrap:wrap;
+  align-items:center; justify-content:space-between;
+  gap:16px;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:32px clamp(18px,4vw,42px);
+  border-top:1px solid var(--border);
+  font-size:0.82rem;
+  color:var(--muted);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:940px) {
+  .hero { grid-template-columns:1fr; min-height:0; }
+  .hero-stats { max-width:none; }
+  .about-card, .education-card, .contact-card { grid-template-columns:1fr; }
+  .web-badge { justify-self:start; }
+  .rune-glyph { display:none; }
+}
+@media (max-width:780px) {
+  html { scroll-padding-top:132px; }
+  .navbar {
+    flex-wrap:wrap; justify-content:space-between;
+    gap:10px 16px; padding-block:12px;
+  }
+  .navbar nav {
+    order:3; flex-basis:100%;
+    flex-wrap:wrap; justify-content:center; gap:16px;
+  }
+}
+@media (max-width:560px) {
+  .floating-tag { padding:7px 11px; font-size:0.6rem; }
+  .tag-one { left:-4px; }
+  .tag-two { right:-4px; }
+  .hero-stats { gap:12px; }
+  .hero-stats strong { font-size:1.15rem; }
+  .scroll-hint { display:none; }
+  .corner-rune { font-size:26px; top:16px; left:16px; }
+  footer { justify-content:center; text-align:center; }
+}
+@media (hover:none), (pointer:coarse) {
+  body, a, button { cursor:auto; }
+  #cursor, .spark { display:none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  *, *::before, *::after {
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+  }
+  .reveal, html.js .reveal { opacity:1 !important; transform:none !important; }
+  #lightningFlash, .spark { display:none; }
+}
+</style>
+</head>
+
+<body>
+<!-- Background storm layers -->
+<div class="storm-overlay" aria-hidden="true"></div>
+<canvas id="stormCanvas" aria-hidden="true"></canvas>
+<div id="lightningFlash" aria-hidden="true"></div>
+<div class="scroll-progress" aria-hidden="true"></div>
+
+<!-- Corner rune -->
+<div class="corner-rune" aria-hidden="true">ᚦ</div>
+
+<!-- Custom lightning cursor -->
+<div id="cursor" aria-hidden="true">ϟ</div>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <a href="#home" class="logo" aria-label="MJ — back to top">MJ<span>⚡</span></a>
+  <nav aria-label="Main navigation">
+    <a href="#home">Hall</a>
+    <a href="#about">Saga</a>
+    <a href="#skills">Powers</a>
+    <a href="#education">Trials</a>
+    <a href="#contact">Raven</a>
+  </nav>
+  <a href="#contact" class="nav-button">Send a Raven ⚡</a>
+</header>
+
+<main>
+<!-- ================== HERO ================== -->
+<section id="home" class="hero">
+  <div class="hero-content reveal">
+    <p class="eyebrow"><span class="bolt">⚡</span> THE THUNDERER OF THE WEB</p>
+
+    <h1>I AM<br>
+      <span class="gold-text">M. MARIA</span><br>
+      <span class="blue-text">JOSHUA.</span>
+    </h1>
+
+    <p class="hero-description">
+      Forged in storms, built with code. Welcome to my corner of Asgard —
+      where lightning meets logic and every line of code is a saga in the making.
+    </p>
+
+    <div class="hero-buttons">
+      <a class="button primary" href="#about">Enter Asgard ⚡</a>
+      <a class="button secondary" href="#contact">Send a Raven</a>
+    </div>
+
+    <div class="hero-stats">
+      <div><strong>01</strong><span>Thunder Mind</span></div>
+      <div><strong>∞</strong><span>Storm Potential</span></div>
+      <div><strong>ᛗ</strong><span>Mjölnir's Path</span></div>
+    </div>
+  </div>
+
+  <div class="hero-art reveal" aria-hidden="true">
+    <div class="rune-ring ring-outer"></div>
+    <div class="rune-ring ring-inner"></div>
+    <div class="rune-glyph">
+      <span>ᚦ</span><span>ᚱ</span><span>ᛟ</span><span>ᛗ</span>
+      <span>ᛉ</span><span>ᚨ</span><span>ᛏ</span><span>ᛒ</span>
+    </div>
+
+    <!-- THOR PHOTO (Direct-ah theriyum, click thevai illa) -->
+    <div class="thor-photo">
+      <div class="portal-ring"></div>
+      <!-- UNGALODA IMAGE PERU JOSH.JPG AH THAN IRUKANUM -->
+      <img src="josh.jpg" alt="M. Maria Joshua">
+    </div>
+
+    <div class="lightning-bolt lb-1"></div>
+    <div class="lightning-bolt lb-2"></div>
+    <div class="lightning-bolt lb-3"></div>
+
+    <div class="floating-tag tag-one">⚡ MJÖLNIR</div>
+    <div class="floating-tag tag-two">ᛗ CODE WEAVER</div>
+    <div class="floating-tag tag-three">GOD OF THUNDER</div>
+  </div>
+
+  <a href="#about" class="scroll-hint">DESCEND INTO ASGARD ↓</a>
+</section>
+
+<!-- ================== ABOUT ================== -->
+<section id="about" class="section reveal">
+  <p class="section-label">01 / SAGA OF THE THUNDERER</p>
+  <h2>Every god has an <span class="gold-text">origin.</span></h2>
+
+  <div class="glass-card about-card">
+    <div class="about-icon" aria-hidden="true">ᚦ</div>
+    <div>
+      <h3>I am M. Maria Joshua</h3>
+      <p>
+        I am an aspiring web developer with basic computer skills and
+        knowledge of HTML. I enjoy exploring technology, creating web
+        experiences, and developing my skills step by step — the way a
+        storm is forged one cloud at a time.
+      </p>
+      <p>
+        My goal is to keep learning, face every challenge with the courage
+        of a thunder god, and turn creative ideas into useful digital
+        experiences that echo far beyond the screen.
+      </p>
+      <p class="quote">"Whosoever holds this hammer, if they be worthy,
+        shall possess the power of… code."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== SKILLS ================== -->
+<section id="skills" class="section reveal">
+  <p class="section-label">02 / ASGARDIAN POWERS</p>
+  <h2>Powers in my <span class="blue-text">arsenal.</span></h2>
+  <p class="section-intro">
+    Even the mightiest warriors forge their strength one battle at a time.
+    Here are the powers I am wielding today.
+  </p>
+
+  <div class="skills-grid">
+    <article class="glass-card skill-card">
+      <div class="skill-icon gold-bg" aria-hidden="true">⌨</div>
+      <h3>Basic Computer Skills</h3>
+      <p>Computer fundamentals and everyday digital tasks.</p>
+      <div class="skill-track" role="img" aria-label="Basic computer skills: 75 percent">
+        <span data-level="75"></span>
+      </div>
+      <small>Forging &amp; practicing</small>
+    </article>
+
+    <article class="glass-card skill-card">
+      <div class="skill-icon blue-bg" aria-hidden="true">&lt;/&gt;</div>
+      <h3>HTML</h3>
+      <p>Building the structure of websites with HTML.</p>
+      <div class="skill-track" role="img" aria-label="HTML: 65 percent">
+        <span data-level="65"></span>
+      </div>
+      <small>Tempering in the forge</small>
+    </article>
+
+    <article class="glass-card skill-card">
+      <div class="skill-icon gold-bg" aria-hidden="true">✦</div>
+      <h3>CSS</h3>
+      <p>Learning styling, layouts, and responsive design.</p>
+      <div class="skill-track" role="img" aria-label="CSS: 40 percent">
+        <span data-level="40"></span>
+      </div>
+      <small>Studying the runes</small>
+    </article>
+
+    <article class="glass-card skill-card">
+      <div class="skill-icon blue-bg" aria-hidden="true">JS</div>
+      <h3>JavaScript</h3>
+      <p>Exploring interactive and dynamic websites.</p>
+      <div class="skill-track" role="img" aria-label="JavaScript: 25 percent">
+        <span data-level="25"></span>
+      </div>
+      <small>Calling the lightning</small>
+    </article>
+  </div>
+  <p class="note">Skill bar values are illustrative. Update them to reflect your current abilities.</p>
+</section>
+
+<!-- ================== EDUCATION ================== -->
+<section id="education" class="section reveal">
+  <p class="section-label">03 / TRIALS OF ASGARD</p>
+  <h2>My journey to <span class="gold-text">godhood.</span></h2>
+
+  <div class="glass-card education-card">
+    <div class="school-icon" aria-hidden="true">🎓</div>
+    <div>
+      <p class="school-label">TRAINING GROUNDS</p>
+      <h3>St. Ann's Matric Hr. Sec. School</h3>
+      <p>Building knowledge, discovering new interests, and preparing for the future — the first realm crossed on the road to Asgard.</p>
+    </div>
+    <span class="web-badge">ORIGIN POINT</span>
+  </div>
+</section>
+
+<!-- ================== MISSION ================== -->
+<section class="mission reveal">
+  <div class="mission-rune" aria-hidden="true">ᚦ</div>
+  <p class="section-label">THE WARRIOR'S CREED</p>
+  <h2>Keep learning.<br><span class="gold-text">Keep forging.</span><br>Never yield.</h2>
+  <p>Small sparks today. Mighty storms tomorrow.</p>
+
+  <button class="button primary" id="quoteButton" type="button">Call the Thunder ⚡</button>
+
+  <p id="motivation" class="motivation" aria-live="polite">
+    Your future is forged by what you build today.
+  </p>
+</section>
+
+<!-- ================== CONTACT ================== -->
+<section id="contact" class="section reveal">
+  <p class="section-label">04 / SEND A RAVEN</p>
+  <h2>Let the <span class="blue-text">thunder</span> speak.</h2>
+
+  <div class="glass-card contact-card">
+    <div class="contact-symbol" aria-hidden="true">✉</div>
+    <div>
+      <h3>Want to summon me?</h3>
+      <p>Dispatched from anywhere in the Nine Realms by email.</p>
+      <a class="email-link" href="mailto:mariajoshua811@gmail.com">mariajoshua811@gmail.com</a>
+    </div>
+    <a class="button primary" href="mailto:mariajoshua811@gmail.com">Send a Raven ↗</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <a href="#home" class="logo" aria-label="MJ — back to top">MJ<span>⚡</span></a>
+  <p>Forged with thunder, code, and a little Asgardian magic.</p>
+  <p>© <span id="year"></span> M. Maria Joshua</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- SAFETY: reveal everything after 2s regardless of JS errors ---------- */
+  setTimeout(function () {
+    document.querySelectorAll('.reveal:not(.is-visible)').forEach(function (el) {
+      el.classList.add('is-visible');
+    });
+  }, 2000);
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer  = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* ---------- 1. Footer year ---------- */
+  var yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ---------- 2. Navbar shadow on scroll ---------- */
+  var navbar = document.querySelector('.navbar');
+  var progressBar = document.querySelector('.scroll-progress');
+  function syncNavbar() {
+    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 20);
+    if (progressBar) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    }
+  }
+  syncNavbar();
+  window.addEventListener('scroll', syncNavbar, { passive: true });
+
+  /* ---------- 3. Nav scroll-spy ---------- */
+  var navLinks = [].slice.call(document.querySelectorAll('.navbar nav a'));
+  var sections = navLinks.map(function (a) {
+    return document.querySelector(a.getAttribute('href'));
+  }).filter(Boolean);
+
+  if (sections.length && 'IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var id = '#' + entry.target.id;
+        navLinks.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === id);
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(function (s) { spy.observe(s); });
+  }
+
+  /* ---------- 4. Reveal on scroll ---------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var revealer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        revealer.unobserve(entry.target);
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
+    revealEls.forEach(function (el) { revealer.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  /* ---------- 5. Skill bars ---------- */
+  var skillsSection = document.getElementById('skills');
+  var bars = skillsSection
+    ? [].slice.call(skillsSection.querySelectorAll('.skill-track span'))
+    : [];
+  function fillBars() {
+    bars.forEach(function (bar, i) {
+      var level = Math.max(0, Math.min(100, Number(bar.dataset.level) || 0));
+      setTimeout(function () { bar.style.width = level + '%'; }, reduceMotion ? 0 : i * 130);
+    });
+  }
+  if (skillsSection && bars.length) {
+    if ('IntersectionObserver' in window) {
+      var barObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          fillBars();
+          barObserver.disconnect();
+        });
+      }, { threshold: 0.2 });
+      barObserver.observe(skillsSection);
+    } else {
+      fillBars();
+    }
+  }
+
+  /* ---------- 6. Thunder button ---------- */
+  var quoteButton = document.getElementById('quoteButton');
+  var motivationEl = document.getElementById('motivation');
+  var quotes = [
+    'Your future is forged by what you build today.',
+    'Even the mightiest gods started as mortals.',
+    'The storm does not break the forge — it tempers the steel.',
+    'One bolt of lightning. One line of code. One legend at a time.',
+    'Valor is not the absence of fear — it is code written despite it.',
+    'Worthy is not who you are. It is what you build.',
+    'Every great saga begins with a single spark.'
+  ];
+  if (quoteButton && motivationEl) {
+    var lastIndex = -1;
+    quoteButton.addEventListener('click', function () {
+      var index = lastIndex;
+      while (index === lastIndex && quotes.length > 1) {
+        index = Math.floor(Math.random() * quotes.length);
+      }
+      lastIndex = index;
+      motivationEl.classList.remove('pop');
+      void motivationEl.offsetWidth;
+      motivationEl.textContent = quotes[index];
+      motivationEl.classList.add('pop');
+
+      // mini lightning flash on click
+      var flash = document.getElementById('lightningFlash');
+      if (flash && !reduceMotion) {
+        flash.classList.add('flash');
+        setTimeout(function () { flash.classList.remove('flash'); }, 400);
+      }
+    });
+  }
+
+  /* ---------- 7. Lightning cursor + spark trail ---------- */
+  var cursor = document.getElementById('cursor');
+  if (cursor && finePointer && !reduceMotion) {
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    var px = mx, py = my;
+    var lastTrail = 0;
+    var visible = false;
+
+    function spawnSpark(x, y) {
+      var s = document.createElement('span');
+      s.className = 'spark';
+      s.style.left = x + 'px';
+      s.style.top = y + 'px';
+      document.body.appendChild(s);
+      s.addEventListener('animationend', function () { s.remove(); }, { once: true });
+      setTimeout(function () { s.remove(); }, 900);
+    }
+
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      if (!visible) { visible = true; cursor.classList.add('is-active'); }
+      var now = performance.now();
+      if (now - lastTrail > 80) {
+        lastTrail = now;
+        spawnSpark(mx, my);
+      }
+    }, { passive: true });
+
+    window.addEventListener('mouseleave', function () {
+      visible = false;
+      cursor.classList.remove('is-active');
+    });
+
+    (function animateCursor() {
+      px += (mx - px) * 0.22;
+      py += (my - py) * 0.22;
+      cursor.style.transform =
+        'translate3d(' + px + 'px,' + py + 'px,0) rotate(' + (px * 0.15) + 'deg)';
+      requestAnimationFrame(animateCursor);
+    })();
+  }
+
+  /* ---------- 8. Periodic lightning flash ---------- */
+  var flashEl = document.getElementById('lightningFlash');
+  function scheduleFlash() {
+    var delay = 7000 + Math.random() * 8000;
+    setTimeout(function () {
+      if (flashEl && !reduceMotion) {
+        flashEl.classList.add('flash');
+        setTimeout(function () { flashEl.classList.remove('flash'); }, 450);
+      }
+      scheduleFlash();
+    }, delay);
+  }
+  if (!reduceMotion) scheduleFlash();
+
+  /* ---------- 9. Storm canvas: rain + occasional lightning ---------- */
+  var canvas = document.getElementById('stormCanvas');
+  if (canvas) {
+    var ctx = canvas.getContext('2d');
+    var DPR = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0;
+    var drops = [];
+    var bolts = [];   // active lightning bolt paths on canvas
+    var rafId = null;
+
+    function buildDrops() {
+      var count = Math.min(140, Math.max(50, Math.round((W * H) / 14000)));
+      drops = [];
+      for (var i = 0; i < count; i++) {
+        drops.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vy: 4 + Math.random() * 8,
+          len: 10 + Math.random() * 16,
+          op: 0.25 + Math.random() * 0.55
+        });
+      }
+    }
+
+    function spawnCanvasBolt() {
+      if (reduceMotion || Math.random() > 0.55) return;
+      var startX = Math.random() * W;
+      var endX = startX + (Math.random() - 0.5) * 260;
+      var segments = 8;
+      var points = [];
+      for (var i = 0; i <= segments; i++) {
+        var t = i / segments;
+        var x = startX + (endX - startX) * t + (Math.random() - 0.5) * 70 * (1 - t);
+        var y = t * H * 0.55;
+        points.push([x, y]);
+      }
+      bolts.push({ points: points, life: 1 });
+    }
+
+    function drawStorm() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Rain
+      for (var i = 0; i < drops.length; i++) {
+        var d = drops[i];
+        d.y += d.vy;
+        if (d.y > H + 20) {
+          d.y = -d.len;
+          d.x = Math.random() * W;
+        }
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x, d.y + d.len);
+        ctx.strokeStyle = 'rgba(124, 231, 255, ' + d.op + ')';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // Lightning bolts
+      for (var b = bolts.length - 1; b >= 0; b--) {
+        var bolt = bolts[b];
+        bolt.life -= 0.045;
+        if (bolt.life <= 0) { bolts.splice(b, 1); continue; }
+
+        ctx.beginPath();
+        ctx.moveTo(bolt.points[0][0], bolt.points[0][1]);
+        for (var p = 1; p < bolt.points.length; p++) {
+          ctx.lineTo(bolt.points[p][0], bolt.points[p][1]);
+        }
+        ctx.strokeStyle = 'rgba(180, 235, 255, ' + (bolt.life * 0.95) + ')';
+        ctx.lineWidth = 2.5 * bolt.life;
+        ctx.shadowBlur = 22;
+        ctx.shadowColor = '#7ce7ff';
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      rafId = requestAnimationFrame(drawStorm);
+    }
+
+    var lastBolt = 0;
+    function maybeSpawnBolt(now) {
+      if (now - lastBolt > 3500 + Math.random() * 4000) {
+        lastBolt = now;
+        spawnCanvasBolt();
+      }
+    }
+    var origLoop = drawStorm;
+    function loop(now) {
+      maybeSpawnBolt(now);
+      origLoop();
+    }
+
+    function start() {
+      if (rafId === null) rafId = requestAnimationFrame(loop);
+    }
+    function stop() {
+      if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+    }
+
+    function resize() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      buildDrops();
+    }
+
+    resize();
+    if (reduceMotion) {
+      // single static frame
+      ctx.clearRect(0, 0, W, H);
+      for (var k = 0; k < drops.length; k++) {
+        var dd = drops[k];
+        ctx.beginPath();
+        ctx.moveTo(dd.x, dd.y);
+        ctx.lineTo(dd.x, dd.y + dd.len);
+        ctx.strokeStyle = 'rgba(124, 231, 255, ' + dd.op + ')';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    } else {
+      start();
+    }
+
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (reduceMotion) return;
+      if (document.hidden) stop(); else start();
+    });
+  }
+})();
+</script>
+</body>
+</html>
